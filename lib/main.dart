@@ -3,6 +3,28 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+
+//region EDIT VALUES HERE
+/// ------------------ EDIT START ------------------
+const String csvFilepath = 'assets/formular-sample-Mesaj pentru elevi cu prieteni - Sheet1 2023-01-17_20-25-10.csv';
+const int numberRow = 3;
+const int nameRow = 1;
+
+String firstnameToMessage(String firstname) {
+  return '''Sâmbătă e ziua cea mare! De la ora 12:00 are loc evenimetul de deschidere „Earthrise”! 🤩
+
+Dacă nu ai făcut-o deja, te invităm să completezi formularul de participare (https://forms.gle/JN7oc9FQ4V6zcKXb7) și să îți pregătești entuziasmul! Vom petrece împreună câteva ore relaxante, vom socializa și ne vom distra. 🤗
+
+Și ca tot veni vorba de distracție, știm ca totul e mai fun cu prietenii, motiv pentru care ne-ar face mare plăcere să-i inviți și pe ei! 🥳
+Invită un prieten, dă-i și lui șansa de a ne descoperi, iar pe viitor puteți participa împreună la atelierele noastre! 
+
+Let’s do ittt!⚡️
+
+P.s: Da, și prietenii tăi trebuie să completeze formularul de participare.''';
+}
+/// ------------------ EDIT END ------------------
+//endregion
+
 void main() {
   runApp(const MyApp());
 }
@@ -22,6 +44,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -31,30 +54,21 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-String firstnameToMessage(String firstname) {
-  return '''Salutare, $firstname ! 
-Îți scriu din partea echipei Earthrise. 
-
-Îți mulțumim pentru interesul și preocuparea față de viitorul nostru comun de care ai dat dovadă prin completarea formularului! 🌍
-
-Avem și o primă provocare! 
-Spune-le și prietenilor despre această super oportunitate până în 15 decembrie, iar după începerea activităților vei fi răsplătit! 🥳
-''';
-}
 
 SMS excelRowToSMS(List<dynamic> row) {
-  var number = row[9];
-  var firstname = row[7];
+  var number = row[numberRow].toString().trim();
+  var firstname = row[nameRow].toString().trim();
   print('number: $number, firstname: $firstname');
-  // 1: 9 cfire
-  // 2:
-  return SMS('0${number}', firstnameToMessage(firstname));
+
+  return SMS(number, firstnameToMessage(firstname));
 }
+
 
 List<SMS> convertExcelDataToSMSList(String data) {
   var listFromCSV = const CsvToListConverter().convert(data, eol: "\n");
   return listFromCSV.sublist(1).map((row) => excelRowToSMS(row)).toList();
 }
+
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
@@ -65,11 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
     SMS("0756587313", "Test 2: ${DateTime.now()}"),
     SMS("0756587313", "Multi\nline\nmessage"),
   ];
-
-  // TODO: replace file path w/ real one
-  var csvFilepath =
-      'assets/formular-sample-2.csv';
-      // 'assets/formular-editat-manual.csv';
 
   var smsList = SAMPLE_SMS_LIST;
 
