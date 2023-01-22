@@ -42,6 +42,7 @@ dependencies:
   sms_maintained:
     git:
       url: https://github.com/andreimc/flutter_sms.git
+  flutter_downloader: ^1.9.1
 
 
 dev_dependencies:

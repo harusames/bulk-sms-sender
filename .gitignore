@@ -43,6 +43,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-assets/*ormular*
+assets/*
 !assets/formular-sample-*.csv
 
